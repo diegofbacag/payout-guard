@@ -2,6 +2,7 @@
 
 import { FilePlusIcon, Icon, UploadSimpleIcon } from '@phosphor-icons/react'
 import React, { useRef, useState } from 'react'
+import { uploadFile, UploadFileDto } from '../services/import.service'
 
 interface DropzoneProps {
   title: string
@@ -9,12 +10,7 @@ interface DropzoneProps {
   icon: Icon
 }
 
-export const Dropzone = ({
-  title,
-  description,
-
-  icon: Icon,
-}: DropzoneProps) => {
+export const Dropzone = ({ title, description, icon: Icon }: DropzoneProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -25,6 +21,14 @@ export const Dropzone = ({
 
     setSelectedFile(file)
   }
+
+  const handleSubmitFile = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    if (!selectedFile) return
+
+    await uploadFile(selectedFile)
+  }
+
   return (
     <div className="flex flex-col">
       <div className="mb-2">
@@ -69,9 +73,7 @@ export const Dropzone = ({
           <button
             className="w-full px-4 py-2.5 bg-[#e63746] text-white rounded-lg font-bold text-sm shadow-md shadow-[#e63746]/20 hover:bg-[#e63746]/90 transition-all flex items-center justify-center gap-2 cursor-pointer"
             type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
+            onClick={handleSubmitFile}
           >
             <UploadSimpleIcon size={18} className="text-white" />
             Subir Archivo
