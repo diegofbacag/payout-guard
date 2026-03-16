@@ -18,4 +18,6 @@ model Report {
   order_id String @db.VarChar(50)
   payload_id String @db.VarChar(50)
   net_payout Int
+
+   @@map("reports")
 }
